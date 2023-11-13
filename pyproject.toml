@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "goit-homework-m2t7"
+version = "0.1.0"
+description = ""
+authors = ["Roman-K26 <romankuspys777@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlalchemy = "^2.0.23"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
