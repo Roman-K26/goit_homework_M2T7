@@ -11,12 +11,15 @@ fake = Faker('uk-UA')
 
 
 def insert_contacts():
-    for _ in range(10):
+    students = session.query(Student).all()
+
+    for _ in range(len(list(students)) + 7):
         contact = Contact(
             first_name=fake.first_name(),
             lust_name=fake.last_name(),
             email=fake.email(),
             phone=fake.phone_number(),
+            student_id=random.choice(students).id
         )
         session.add(contact)
 

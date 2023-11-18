@@ -56,8 +56,35 @@ def get_students_with_contacts():
     for s in students:
         columns = ["id", "fullname", "contacts"]
         r = [dict(
-            zip(columns, (s.id, s.fullname, [(c.id, c.fullname) for c in s.contacts])))]
+            zip(columns, (s.id, s.full_name, [(c.id, c.full_name) for c in s.contacts])))]
         print(r)
+
+
+def get_info():
+    students = (session.query(Student.id, Student.full_name, Teacher.full_name.label("teacher_fullname"),
+                              Contact.full_name.label("contact_fullname")).select_from(Student)
+                .join(TeacherStudent).join(Teacher).join(Contact).all())
+    for s in students:
+        columns = ["id", "fullname", "teachers", "contacts"]
+        r = [dict(
+            zip(columns, (s.id, s.full_name, s.teacher_fullname, s.contact_fullname)))]
+        print(r)
+
+
+# зробити апдейт
+
+def update_student(s_id, teachers: list[Teacher]):
+    student = session.query(Student).filter_by(id=s_id).first()
+    student.teachers = teachers
+    session.commit()
+    return student
+
+# удалить
+def remove_student(s_id):
+    student = session.query(Student).filter_by(id=s_id).first()
+    session.delete(student)
+    session.commit()
+
 
 if __name__ == '__main__':
     #get_student_join()
@@ -65,4 +92,9 @@ if __name__ == '__main__':
     #get_teachers()
     #get_teachers_outerjoin()
     #get_teachers_by_date()
-    get_students_with_contacts()
+    #get_students_with_contacts()
+    #get_info()
+    #t = session.query(Teacher).filter(Teacher.id.in_([1, 2, 3])).all()
+    #st = update_student(8, t)
+    #print(st)
+    remove_student(8)
