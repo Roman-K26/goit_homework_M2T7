@@ -30,11 +30,29 @@ class Student(Base):
     phone = Column('cell_phone', String(100))
     address = Column(String(150))
     start_study = Column(Date, nullable=False)
-    teachers = relationship("Teacher", secondary='teachers_to_students', back_populates="students") #звязуємо таблиці
+    teachers = relationship("Teacher", secondary='teachers_to_students', back_populates="students")
 
     @hybrid_property
     def full_name(self):
         return self.first_name + " " + self.lust_name
+
+
+# додавання додаткового поля в таблицю "Студенти"
+class Contact(Base):
+    __tablename__ = 'contacts'
+    id = Column('id', Integer, primary_key=True)
+    first_name = Column(String(120))
+    lust_name = Column(String(120))
+    email = Column(String(100))
+    phone = Column('cell_phone', String(100))
+    student_id = Column(ForeignKey("students.id", ondelete='CASCADE', onupdate='CASCADE'))
+    student = relationship("Student", backref="contacts")
+
+
+    @hybrid_property
+    def full_name(self):
+        return self.first_name + " " + self.lust_name
+
 
 
 # звязок "багато до багатьох". Створюється спеціальний клас:
